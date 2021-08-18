@@ -1,0 +1,13 @@
+<div [formGroup]="form">
+  <label [attr.for]="textbox.key">{{textbox.label}}</label>
+
+  <div [ngSwitch]="textbox.controlType">
+
+    <input *ngSwitchCase="'textbox'" [formControlName]="textbox.key"
+            [id]="textbox.key" [type]="textbox.type">
+
+
+  </div>
+
+  <div class="errorMessage" *ngIf="!isValid">{{textbox.label}} is required</div>
+</div>
