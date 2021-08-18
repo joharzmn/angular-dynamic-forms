@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { BaseDynamicControl } from '../model';
 import { DynamicControlService } from '../services/dynamicControl.service';
 
@@ -13,12 +13,28 @@ export class DynamicFormComponent implements OnInit {
   form!: FormGroup;
   payLoad = '';
 
-  constructor(private qcs: DynamicControlService) {}
+  constructor(
+    private qcs: DynamicControlService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
-    this.form = this.qcs.toFormGroup(this.textBoxes as BaseDynamicControl<
-      string
-    >[]);
+    let listofgroups = [];
+    listofgroups.push(
+      this.qcs.toFormGroup(this.textBoxes as BaseDynamicControl<string>[])
+    );
+    listofgroups.push(
+      this.qcs.toFormGroup(this.textBoxes as BaseDynamicControl<string>[])
+    );
+
+    let formArray = this.qcs.toFormArray(listofgroups);
+    console.log(formArray);
+
+    this.form = this.formBuilder.group({
+      fields: formArray
+    });
+
+    console.log(this.form.value);
   }
 
   onSubmit() {
